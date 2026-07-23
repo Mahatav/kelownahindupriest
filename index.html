@@ -163,7 +163,6 @@ h2.title{font-size:clamp(1.9rem,3.6vw,2.7rem);margin:14px 0 12px;color:var(--mar
 .bk{
   margin-top:44px;background:rgba(255,253,246,.045);
   border:1px solid rgba(233,176,76,.28);border-radius:22px;padding:34px;
-  backdrop-filter:blur(4px);
 }
 .bk-progress{display:flex;align-items:center;gap:0;margin-bottom:30px}
 .bk-dot{display:flex;align-items:center;gap:10px;font-size:.86rem;font-weight:700;color:#b99b6d}
@@ -259,6 +258,56 @@ footer{background:var(--maroon-950);color:#cbb08a;padding:56px 0 40px;position:r
 .foot h4{font-family:'Fraunces',serif;color:var(--gold-soft);font-weight:600;margin-bottom:13px;font-size:1.02rem}
 .legal{margin-top:42px;padding-top:22px;border-top:1px solid rgba(233,176,76,.18);font-size:.85rem;color:#96794f;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
+/* ---------- interactivity layer ---------- */
+#petals{position:fixed;inset:0;z-index:55;pointer-events:none}
+.toast{
+  position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);z-index:70;
+  background:var(--maroon-900);color:var(--gold-soft);border:1px solid rgba(233,176,76,.5);
+  padding:14px 22px;border-radius:999px;font-weight:700;display:flex;align-items:center;gap:10px;
+  opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;box-shadow:0 18px 40px -12px rgba(0,0,0,.5);
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast svg{width:20px;height:20px}
+.bell-btn{
+  display:inline-flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;
+  color:#cbb08a;font:inherit;font-size:.92rem;padding:4px 6px;border-radius:8px;
+  transition:color .2s;
+}
+.bell-btn:hover{color:var(--gold-soft)}
+.bell-btn svg{width:17px;height:17px;transform-origin:50% 12%}
+.bell-btn.ringing svg{animation:ring .9s cubic-bezier(.36,.07,.19,.97)}
+@keyframes ring{
+  0%,100%{transform:rotate(0)}
+  15%{transform:rotate(16deg)}30%{transform:rotate(-13deg)}
+  45%{transform:rotate(9deg)}60%{transform:rotate(-6deg)}75%{transform:rotate(3deg)}
+}
+.nav-links a.active{color:var(--saffron);border-color:var(--gold)}
+.reveal{transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+.reveal:not(.in){opacity:0;transform:translateY(26px)}
+.reveal.in{opacity:1}
+@media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none}}
+.svc,.step{will-change:transform;transform:perspective(800px)}
+.svc .icon{transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.svc:hover .icon{transform:rotate(-6deg) scale(1.12)}
+.btn{position:relative;overflow:hidden}
+.btn::after{
+  content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:skewX(-20deg);transition:left .5s ease;pointer-events:none;
+}
+.btn:hover::after{left:130%}
+.btn:active,.chip:active,.svc:active{transform:scale(.975)}
+.bk-dot .pip{position:relative}
+.bk-dot.done .pip::after,.bk-dot.active .pip::after{
+  content:"";position:absolute;top:-9px;left:50%;width:7px;height:10px;transform:translateX(-50%);
+  background:radial-gradient(ellipse at 50% 80%,#ffd166 0%,#f0691c 60%,transparent 75%);
+  border-radius:50% 50% 45% 45%;animation:flicker 1.6s ease-in-out infinite;
+}
+.mandala svg.wheel{cursor:pointer}
+.mandala .rings.whirl{animation:spin 2.2s cubic-bezier(.3,.6,.2,1) 1}
+.preview.flash{animation:pvFlash .5s ease}
+@keyframes pvFlash{0%{border-color:var(--gold);background:rgba(233,176,76,.18)}100%{}}
+.faq details p{overflow:hidden}
 /* floating whatsapp */
 .fab{
   position:fixed;right:22px;bottom:22px;z-index:60;width:58px;height:58px;border-radius:50%;
@@ -306,6 +355,10 @@ footer{background:var(--maroon-950);color:#cbb08a;padding:56px 0 40px;position:r
       <div class="hero-meta rise d4">
         <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>Kelowna · West Kelowna · Okanagan</span>
         <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Muhurat-friendly scheduling</span>
+        <button class="bell-btn" id="bellBtn" type="button" aria-label="Ring the temple bell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v2"/><path d="M7 10a5 5 0 0 1 10 0c0 3 .8 4.3 1.6 5.2.5.6.1 1.8-.7 1.8H6.1c-.8 0-1.2-1.2-.7-1.8C6.2 14.3 7 13 7 10Z"/><path d="M10.5 19.5a1.5 1.5 0 0 0 3 0"/></svg>
+          Ring the temple bell
+        </button>
       </div>
     </div>
     <div class="mandala rise d2" aria-hidden="true">
@@ -625,6 +678,12 @@ footer{background:var(--maroon-950);color:#cbb08a;padding:56px 0 40px;position:r
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.7 14.3c-.2.7-1.3 1.3-1.9 1.4-.5.1-1.1.2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5s.8 1.9.8 2c.1.1.1.3 0 .5-.3.6-.7.9-.5 1.2.7 1.2 1.6 2 2.8 2.6.3.2.5.1.7-.1l.9-1c.2-.3.4-.2.7-.1l1.8.9c.3.1.5.2.5.3.1.1.1.6-.2 1.3Z"/></svg>
 </a>
 
+<canvas id="petals" aria-hidden="true"></canvas>
+<div class="toast" id="toast" role="status">
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4c2 2.6 3 4.5 3 6a3 3 0 1 1-6 0c0-1.5 1-3.4 3-6Z" fill="#f0691c"/><path d="M6 17c1.6 1.4 3.7 2 6 2s4.4-.6 6-2l-1 2.6c-1.4.9-3.1 1.4-5 1.4s-3.6-.5-5-1.4Z" fill="#e9b04c"/></svg>
+  <span id="toastMsg">Namaste!</span>
+</div>
+
 <script>
 (function(){
   "use strict";
@@ -756,6 +815,213 @@ footer{background:var(--maroon-950);color:#cbb08a;padding:56px 0 40px;position:r
   });
 
   document.getElementById("yr").textContent = new Date().getFullYear();
+})();
+
+/* ============ delight layer ============ */
+(function(){
+  "use strict";
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine = window.matchMedia("(pointer: fine)").matches;
+
+  /* ---- toast ---- */
+  var toast = document.getElementById("toast");
+  var toastTimer;
+  function say(msg){
+    document.getElementById("toastMsg").textContent = msg;
+    toast.classList.add("on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove("on"); }, 2600);
+  }
+
+  /* ---- marigold petal canvas ---- */
+  var canvas = document.getElementById("petals");
+  var ctx2d = canvas.getContext("2d");
+  var petals = [], raf = null, heroVisible = false, lastAmbient = 0;
+  var COLORS = ["#f0691c","#e9b04c","#e2580e","#ffd166","#d4491a"];
+  function fit(){
+    var dpr = Math.min(window.devicePixelRatio||1, 2);
+    canvas.width = innerWidth*dpr; canvas.height = innerHeight*dpr;
+    canvas.style.width = innerWidth+"px"; canvas.style.height = innerHeight+"px";
+    ctx2d.setTransform(dpr,0,0,dpr,0,0);
+  }
+  fit(); addEventListener("resize", fit, {passive:true});
+  function spawn(x,y,burst){
+    petals.push({
+      x:x, y:y,
+      vx:(Math.random()-.5)*(burst?7:0.6),
+      vy:burst?(-Math.random()*6-2):(Math.random()*.5+.45),
+      g:burst?0.16:0,
+      rot:Math.random()*Math.PI*2, vr:(Math.random()-.5)*.08,
+      w:6+Math.random()*7, h:4+Math.random()*4,
+      c:COLORS[(Math.random()*COLORS.length)|0],
+      life:0, max:burst?110:1400, sway:Math.random()*Math.PI*2
+    });
+  }
+  function tick(){
+    ctx2d.clearRect(0,0,innerWidth,innerHeight);
+    var t = performance.now();
+    if(heroVisible && !reduced && t-lastAmbient>1300 && petals.length<16 && !document.hidden){
+      spawn(Math.random()*innerWidth, -12, false); lastAmbient = t;
+    }
+    for(var i=petals.length-1;i>=0;i--){
+      var p = petals[i];
+      p.life++; p.sway+=.02; p.vy+=p.g;
+      p.x += p.vx + Math.sin(p.sway)*.5; p.y += p.vy; p.rot += p.vr;
+      var fade = p.g ? Math.max(0,1-p.life/p.max) : Math.min(1, (p.max-p.life)/120);
+      if(p.life>p.max || p.y>innerHeight+20){ petals.splice(i,1); continue; }
+      ctx2d.save();
+      ctx2d.translate(p.x,p.y); ctx2d.rotate(p.rot);
+      ctx2d.globalAlpha = Math.max(0,Math.min(.9,fade));
+      ctx2d.fillStyle = p.c;
+      ctx2d.beginPath();
+      ctx2d.ellipse(0,0,p.w,p.h,0,0,Math.PI*2);
+      ctx2d.fill();
+      ctx2d.restore();
+    }
+    raf = petals.length||heroVisible ? requestAnimationFrame(tick) : null;
+  }
+  function wake(){ if(!raf) raf = requestAnimationFrame(tick); }
+  function burstAt(x,y,n){
+    if(reduced) return;
+    for(var i=0;i<(n||26);i++) spawn(x,y,true);
+    wake();
+  }
+  new IntersectionObserver(function(en){
+    heroVisible = en[0].isIntersecting;
+    if(heroVisible) wake();
+  }).observe(document.querySelector(".hero"));
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) wake(); });
+
+  /* ---- temple bell ---- */
+  var actx = null;
+  function chime(){
+    try{
+      actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+      if(actx.state==="suspended") actx.resume();
+      var t = actx.currentTime;
+      [[659,.30],[1318,.16],[1975,.07],[988,.10]].forEach(function(pair,i){
+        var o = actx.createOscillator(), g = actx.createGain();
+        o.type = "sine"; o.frequency.value = pair[0]*(1+(i?0.002*i:0));
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(pair[1]*0.25, t+0.015);
+        g.gain.exponentialRampToValueAtTime(0.0001, t+2.4);
+        o.connect(g); g.connect(actx.destination);
+        o.start(t); o.stop(t+2.5);
+      });
+    }catch(e){}
+  }
+  var bell = document.getElementById("bellBtn");
+  bell.addEventListener("click", function(){
+    bell.classList.remove("ringing"); void bell.offsetWidth;
+    bell.classList.add("ringing");
+    chime();
+    var r = bell.getBoundingClientRect();
+    burstAt(r.left+r.width/2, r.top, 14);
+    say("Ghanti bhaji — shubh aarambh!");
+  });
+
+  /* ---- scrollspy ---- */
+  var links = {};
+  document.querySelectorAll(".nav-links a[href^='#']").forEach(function(a){
+    links[a.getAttribute("href").slice(1)] = a;
+  });
+  var spy = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.target.classList.contains("hero")){
+        if(en.isIntersecting) Object.keys(links).forEach(function(k){ links[k].classList.remove("active"); });
+        return;
+      }
+      var a = links[en.target.id];
+      if(!a) return;
+      if(en.isIntersecting){
+        Object.keys(links).forEach(function(k){ links[k].classList.remove("active"); });
+        a.classList.add("active");
+      }
+    });
+  }, {rootMargin:"-35% 0px -55% 0px"});
+  ["services","how","about","faq"].forEach(function(id){
+    var el = document.getElementById(id); if(el) spy.observe(el);
+  });
+  spy.observe(document.querySelector(".hero"));
+
+  /* ---- scroll reveals ---- */
+  var revealables = document.querySelectorAll(".svc, .step, .faq details, .about-copy > *, .ig-card, .bk");
+  var ro = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add("in"); ro.unobserve(en.target); }
+    });
+  }, {rootMargin:"0px 0px -8% 0px"});
+  revealables.forEach(function(el,i){
+    el.classList.add("reveal");
+    el.style.transitionDelay = (i%4)*70+"ms";
+    ro.observe(el);
+  });
+
+  /* ---- 3D tilt on cards ---- */
+  if(fine && !reduced){
+    document.querySelectorAll(".svc, .step").forEach(function(card){
+      card.addEventListener("pointermove", function(e){
+        var r = card.getBoundingClientRect();
+        var rx = -((e.clientY-r.top)/r.height-.5)*7;
+        var ry = ((e.clientX-r.left)/r.width-.5)*7;
+        card.style.transform = "perspective(800px) rotateX("+rx.toFixed(2)+"deg) rotateY("+ry.toFixed(2)+"deg) translateY(-2px)";
+      });
+      card.addEventListener("pointerleave", function(){
+        card.style.transform = "perspective(800px)";
+      });
+    });
+  }
+
+  /* ---- mandala: scroll parallax + om easter egg ---- */
+  var wheel = document.querySelector(".mandala svg.wheel");
+  var rings = document.querySelector(".mandala .rings");
+  if(wheel && !reduced){
+    var ticking = false;
+    addEventListener("scroll", function(){
+      if(ticking) return; ticking = true;
+      requestAnimationFrame(function(){
+        wheel.style.transform = "rotate("+(scrollY*0.025)+"deg)";
+        ticking = false;
+      });
+    }, {passive:true});
+  }
+  if(wheel){
+    wheel.addEventListener("click", function(e){
+      if(rings){
+        rings.classList.remove("whirl"); void wheel.getBoundingClientRect();
+        rings.classList.add("whirl");
+        setTimeout(function(){ rings.classList.remove("whirl"); }, 2300);
+      }
+      burstAt(e.clientX, e.clientY, 20);
+      say("Om Shanti");
+    });
+  }
+
+  /* ---- booking: petal poofs on progress, celebration on send ---- */
+  function poofAtDot(n){
+    var dot = document.querySelector('.bk-dot[data-dot="'+n+'"] .pip');
+    if(!dot) return;
+    var r = dot.getBoundingClientRect();
+    burstAt(r.left+r.width/2, r.top+r.height/2, 10);
+  }
+  var n1 = document.getElementById("next1"), n2 = document.getElementById("next2");
+  n1.addEventListener("click", function(){
+    if(document.querySelector('.bk-panel[data-panel="2"]').classList.contains("on")) poofAtDot(2);
+  });
+  n2.addEventListener("click", function(){
+    var p3 = document.querySelector('.bk-panel[data-panel="3"]');
+    if(p3.classList.contains("on")){
+      poofAtDot(3);
+      var pv = document.getElementById("bkPreview");
+      pv.classList.remove("flash"); void pv.offsetWidth; pv.classList.add("flash");
+    }
+  });
+  document.getElementById("sendWa").addEventListener("click", function(e){
+    if(!document.getElementById("bkName").value.trim()) return;
+    var r = e.currentTarget.getBoundingClientRect();
+    burstAt(r.left+r.width/2, r.top, 34);
+    say("Opening WhatsApp — shubh din!");
+  });
 })();
 </script>
 </body>
